@@ -8,14 +8,14 @@ namespace practica_equipo_futbol
     {
         static void Main(string[] args)
         {
-            /*
+            
 
             // Cargar equipo
-            Equipo equipo1 = new Equipo("Juan", "Mariano");
+            Equipo equipo1 = new Equipo("Union de Santa Fe", "Mariano Coppola","SANTA FE");
 
             // Cargar jugadores
-            Jugador jugador1 = new Jugador("Valentino", 9);
-            Jugador jugador2 = new Jugador("Thiago", 5);
+            Jugador jugador1 = new Jugador("Lautaro", 9, 13);
+            Jugador jugador2 = new Jugador("Thiago", 5, 13);
 
             // Agregar los jugadores
             equipo1.AgregarJugador(jugador1);
@@ -31,15 +31,15 @@ namespace practica_equipo_futbol
             }
 
             // Buscar los jugadores
-            bool buscarJugador1 = equipo1.BuscarJugador("Valentino");
-            bool buscarJugador2 = equipo1.BuscarJugador("Juan");
+            bool buscarJugador1 = equipo1.BuscarJugador("Lautaro");
+            bool buscarJugador2 = equipo1.BuscarJugador("Thiago");
 
             // Mostrar información sobre la búsqueda
-            Console.WriteLine($"Jugador Valentino: {buscarJugador1}");
-            Console.WriteLine($"Jugador Juan: {buscarJugador2}");
+            Console.WriteLine($"Jugador Lautaro: {buscarJugador1}");
+            Console.WriteLine($"Jugador Thiago: {buscarJugador2}");
 
             // Eliminar jugador
-            Jugador jugadorABorrar = equipo1.Jugadores.Find(j => j.Nombre == "Valentino");
+            Jugador jugadorABorrar = equipo1.Jugadores.Find(j => j.Nombre == "Lautaro");
             if (jugadorABorrar != null)
             {
                 // Si se encontró, eliminarlo del equipo
@@ -47,8 +47,8 @@ namespace practica_equipo_futbol
             }
 
             // Crear equipo visitante y local
-            EquipoLocal equipoLocal = new EquipoLocal("Los Pibes", "Luis");
-            EquipoVisitante equipoVisitante = new EquipoVisitante("Villeros", "Jose");
+            EquipoLocal equipoLocal = new EquipoLocal("Los Chacras", "Luis", "Ituzaingo");
+            EquipoVisitante equipoVisitante = new EquipoVisitante("Los Charros", "Marinao", "Merlo");
 
             // Crear una instancia de la clase Partido con los equipos local y visitante
             Partido partido = new Partido(equipoLocal, equipoVisitante);
@@ -58,14 +58,14 @@ namespace practica_equipo_futbol
 
             // Mostrar el resultado del partido
             Console.WriteLine($"Resultado del partido: {resultadoPartido}");
-            */
+            
 
             EquipoBD equipoBD = new EquipoBD();
 
             // 1. Obtener la lista de jugadores de un equipo específico
-            /*Console.WriteLine("Ingrese el ID del equipo para ver sus jugadores:");
+           /* Console.WriteLine("Ingrese el ID del equipo para ver sus jugadores:");
             int equipoId = int.Parse(Console.ReadLine());
-            var jugadores = equipoBD.GetJugadoresPorEquipoId(equipoId);
+            var jugadores = equipoBD.GetNumeroJugadoresPorEquipoEspecifico(equipoId);
 
             Console.WriteLine($"\nJugadores del equipo con ID {equipoId}:");
            foreach (var jugador in jugadores)
@@ -73,12 +73,12 @@ namespace practica_equipo_futbol
                 Console.WriteLine($"ID: {jugador.Id}, Nombre: {jugador.Nombre}, Número: {jugador.Numero}");
             }*/
 
-            equipoBD.UpdateCiudadEquipo(1, "Buenos Aires");
+            /*equipoBD.UpdateCiudadEquipo(1, "Buenos Aires");
             equipoBD.UpdateCiudadEquipo(2, "Rosario");
             equipoBD.UpdateCiudadEquipo(3, "Córdoba");
             equipoBD.UpdateCiudadEquipo(4, "Mendoza");
-            equipoBD.UpdateCiudadEquipo(5, "La Plata");
-
+            equipoBD.UpdateCiudadEquipo(5, "La Plata");*/
+            
             Console.WriteLine("\n----------------------------------------------\n");
 
             // 2. Obtener la lista de todos los equipos y sus entrenadores
@@ -117,22 +117,34 @@ namespace practica_equipo_futbol
             }
 
             Console.WriteLine("\n----------------------------------------------\n");
-            // 5. Cambiar equipo del jugador
-            int jugadorId = 1;
-            int nuevoEquipoId = 3;
+            //Console.WriteLine("5. Cambiar equipo del jugador");
+            int jugadorId = 9;
+            int nuevoEquipoId = 13;
             equipoBD.CambiarEquipoJugador(jugadorId, nuevoEquipoId);
 
-            Console.WriteLine($"Se cambió el equipo del jugador con ID {jugadorId} al equipo con ID {nuevoEquipoId}.");
+            Console.WriteLine($"Se cambió el equipo del jugador con ID {jugadorId} con el nombre al equipo con ID {nuevoEquipoId}.");
+
+            
+            Console.WriteLine("\nNúmero de jugadores por equipo especifico: \n");
+            
+            foreach (var equipo in equiposConEntrenadores)
+            {
+                int numeroJugadores = equipoBD.GetNumeroJugadoresPorEquipoEspecifico(equipo.Id);
+                Console.WriteLine($"Equipo: {equipo.Nombre}, Número de Jugadores: {numeroJugadores}");
+            }
+
+
 
             Console.WriteLine("\n----------------------------------------------\n");
 
-            // 6. Obtener la lista de equipos que no tienen jugadores
+            /* 6. Obtener la lista de equipos que no tienen jugadores
             var equiposSinJugadores = equipoBD.GetEquiposSinJugadores();
             Console.WriteLine("\nEquipos que no tienen jugadores: \n");
             foreach (var equipo in equiposSinJugadores)
             {
                 Console.WriteLine($"ID: {equipo.Id}, Nombre: {equipo.Nombre}, Entrenador: {equipo.Entrenador}");
-            }
+            }*/
+
         }
     }
 }

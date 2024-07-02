@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Runtime.Remoting.Messaging;
 
 
 namespace practica_equipo_futbol.Models
@@ -12,7 +13,7 @@ namespace practica_equipo_futbol.Models
         public List<Equipo> GetEquipos()
         {
             List<Equipo> equipos = new List<Equipo>();
-            string query = "SELECT id, nombre, entrenador, ciudad FROM equipos";
+            string query = "SELECT idEquipos, nombre, entrenador, ciudad FROM equipos";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -40,10 +41,11 @@ namespace practica_equipo_futbol.Models
             return equipos;
         }
 
-       /* public List<Jugador> GetJugadoresPorEquipoId(int equipoId)
+       
+        /* public List<Jugador> GetJugadoresPorEquipoId(int equipoId)
         {
             List<Jugador> jugadores = new List<Jugador>();
-            string query = "SELECT id, nombre, equipos, numero FROM Jugadores WHERE id = @equipoId";
+            string query = "SELECT idJugador, nombre, equipos, numero FROM Jugadores";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -54,14 +56,14 @@ namespace practica_equipo_futbol.Models
 
                 while (reader.Read())
                 {
-                    Jugador jugador = new Jugador(
-                        reader.GetString("nombre"),
-                        reader.GetInt32("numero"),
-
-                        equipoId  // Añadir el equipoId aquí
-                    )
+                    Jugador jugador = new Jugador
+                        (
+                       reader.GetString("nombre"),
+                       reader.GetInt32("numero"),
+                      
+                        )
                     {
-                        Id = reader.GetInt32("id")
+                       // Id = reader.GetInt32("idJugador")
                     };
                     jugadores.Add(jugador);
                 }
@@ -76,7 +78,7 @@ namespace practica_equipo_futbol.Models
         public List<Equipo> GetEquiposConEntrenadores()
         {
             List<Equipo> equipos = new List<Equipo>();
-            string query = "SELECT id, nombre, entrenador, ciudad FROM equipos";
+            string query = "SELECT idEquipos, nombre, entrenador, ciudad FROM Equipos";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -92,7 +94,7 @@ namespace practica_equipo_futbol.Models
 
                     Equipo equipo = new Equipo(nombre, entrenador, ciudad)
                     {
-                        Id = reader.GetInt32(reader.GetOrdinal("id"))
+                        Id = reader.GetInt32(reader.GetOrdinal("idEquipos"))
                     };
                     equipos.Add(equipo);
                 }
@@ -107,12 +109,12 @@ namespace practica_equipo_futbol.Models
         public int GetNumeroJugadoresPorEquipo(int equipoId)
         {
             int numeroJugadores = 0;
-            string query = "SELECT COUNT(*) FROM jugadores WHERE id = @equipoId";
+            string query = "SELECT COUNT(*) FROM Jugadores WHERE idEquipos = @idEquipos;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@equipoId", equipoId);
+                command.Parameters.AddWithValue("@idEquipos", equipoId);
                 connection.Open();
                 numeroJugadores = Convert.ToInt32(command.ExecuteScalar());
                 connection.Close();
@@ -123,13 +125,13 @@ namespace practica_equipo_futbol.Models
 
         public void UpdateCiudadEquipo(int equipoId, string ciudad)
         {
-            string query = "UPDATE equipos SET ciudad = @ciudad WHERE id = @equipoId";
+            string query = "UPDATE Equipos SET ciudad = @ciudad WHERE idEquipos = @idEquipos";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@ciudad", ciudad);
-                command.Parameters.AddWithValue("@equipoId", equipoId);
+                command.Parameters.AddWithValue("@idEquipos", equipoId);
                 connection.Open();
                 command.ExecuteNonQuery();
                 connection.Close();
@@ -140,10 +142,9 @@ namespace practica_equipo_futbol.Models
         {
             List<EquipoConJugadores> equiposConJugadores = new List<EquipoConJugadores>();
             string query = @"
-        SELECT e.id AS EquipoId, e.nombre AS EquipoNombre, e.entrenador AS EquipoEntrenador, e.ciudad AS EquipoCiudad,
-               j.id AS JugadorId, j.nombre AS JugadorNombre, j.numero AS JugadorNumero
-        FROM equipos e
-        LEFT JOIN jugadores j ON e.id = j.id
+        SELECT e.idEquipos AS EquipoId, e.nombre AS EquipoNombre, e.entrenador AS EquipoEntrenador, e.ciudad AS EquipoCiudad
+        FROM Equipos e
+        LEFT JOIN Jugadores j ON  e.idEquipos = j.idEquipos
         ORDER BY e.nombre, j.nombre";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -170,18 +171,6 @@ namespace practica_equipo_futbol.Models
                         equiposConJugadores.Add(equipoConJugadores);
                     }
 
-                    if (!reader.IsDBNull(reader.GetOrdinal("JugadorId")))
-                    {
-                        Jugador jugador = new Jugador(
-                            reader.GetString(reader.GetOrdinal("JugadorNombre")),
-                            reader.GetInt32(reader.GetOrdinal("JugadorNumero")),
-                            equipoId
-                        )
-                        {
-                            Id = reader.GetInt32(reader.GetOrdinal("JugadorId"))
-                        };
-                        equipoConJugadores.Jugadores.Add(jugador);
-                    }
                 }
 
                 reader.Close();
@@ -193,28 +182,46 @@ namespace practica_equipo_futbol.Models
 
         public void CambiarEquipoJugador(int jugadorId, int nuevoEquipoId)
         {
-            string query = "UPDATE jugadores SET id = @nuevoEquipoId WHERE id = @jugadorId";
+            string query = "UPDATE Jugadores SET idEquipos = @nuevoEquipoId WHERE idJugador = @idJugador ";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@nuevoEquipoId", nuevoEquipoId);
-                command.Parameters.AddWithValue("@jugadorId", jugadorId);
-
+                command.Parameters.AddWithValue("@idJugador", jugadorId);
                 connection.Open();
                 command.ExecuteNonQuery();
                 connection.Close();
             }
+
         }
 
-        public List<Equipo> GetEquiposSinJugadores()
+        
+        public int GetNumeroJugadoresPorEquipoEspecifico(int equipoId)
+        {
+            int numeroJugadoresEspecificos = 0;
+            string query = "SELECT COUNT(*) FROM Jugadores WHERE idEquipos = 10";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+                numeroJugadoresEspecificos = Convert.ToInt32(command.ExecuteScalar());
+                connection.Close();
+            }
+
+            return numeroJugadoresEspecificos;
+        }
+
+
+        /*public List<Equipo> GetEquiposSinJugadores()
         {
             List<Equipo> equiposSinJugadores = new List<Equipo>();
             string query = @"
-        SELECT e.id, e.nombre, e.entrenador, e.ciudad
-        FROM equipos e
-        LEFT JOIN jugadores j ON e.id = j.id
-        WHERE j.id IS NULL";
+        SELECT e.idEquipos, e.nombre, e.entrenador, e.ciudad
+        FROM Equipos e
+        LEFT JOIN jugadores j ON e.idEquipos = j.idEquipos
+        WHERE j.Equipos IS NULL";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -230,7 +237,7 @@ namespace practica_equipo_futbol.Models
 
                     Equipo equipo = new Equipo(nombre, entrenador, ciudad)
                     {
-                        Id = reader.GetInt32(reader.GetOrdinal("id"))
+                        Id = reader.GetInt32(reader.GetOrdinal("idEntrenador"))
                     };
                     equiposSinJugadores.Add(equipo);
                 }
@@ -240,6 +247,8 @@ namespace practica_equipo_futbol.Models
             }
 
             return equiposSinJugadores;
-        }
+        }*/
+
+        
     }
 }
