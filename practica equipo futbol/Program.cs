@@ -63,15 +63,15 @@ namespace practica_equipo_futbol
             EquipoBD equipoBD = new EquipoBD();
 
             // 1. Obtener la lista de jugadores de un equipo específico
-            Console.WriteLine("Ingrese el ID del equipo para ver sus jugadores:");
+            /*Console.WriteLine("Ingrese el ID del equipo para ver sus jugadores:");
             int equipoId = int.Parse(Console.ReadLine());
             var jugadores = equipoBD.GetJugadoresPorEquipoId(equipoId);
 
             Console.WriteLine($"\nJugadores del equipo con ID {equipoId}:");
-            foreach (var jugador in jugadores)
+           foreach (var jugador in jugadores)
             {
                 Console.WriteLine($"ID: {jugador.Id}, Nombre: {jugador.Nombre}, Número: {jugador.Numero}");
-            }
+            }*/
 
             equipoBD.UpdateCiudadEquipo(1, "Buenos Aires");
             equipoBD.UpdateCiudadEquipo(2, "Rosario");

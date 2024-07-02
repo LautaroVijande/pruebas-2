@@ -1,23 +1,24 @@
-﻿using MySql.Data.MySqlClient;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+
 
 namespace practica_equipo_futbol.Models
 {
     public class EquipoBD
     {
-        private string connectionString = "Server=127.0.0.1;Database=equipos;User ID=root;Password=123;";
+        private string connectionString = "Data Source= GCNB-470\\LAUTAROSERVER;Initial Catalog=gestion_equipos_futbol;Integrated Security=True;";
 
         public List<Equipo> GetEquipos()
         {
             List<Equipo> equipos = new List<Equipo>();
             string query = "SELECT id, nombre, entrenador, ciudad FROM equipos";
 
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                MySqlCommand command = new MySqlCommand(query, connection);
+                SqlCommand command = new SqlCommand(query, connection);
                 connection.Open();
-                MySqlDataReader reader = command.ExecuteReader();
+                SqlDataReader reader = command.ExecuteReader();
 
                 while (reader.Read())
                 {
@@ -39,23 +40,24 @@ namespace practica_equipo_futbol.Models
             return equipos;
         }
 
-        public List<Jugador> GetJugadoresPorEquipoId(int equipoId)
+       /* public List<Jugador> GetJugadoresPorEquipoId(int equipoId)
         {
             List<Jugador> jugadores = new List<Jugador>();
-            string query = "SELECT id, nombre, numero FROM jugadores WHERE equipo_id = @equipoId";
+            string query = "SELECT id, nombre, equipos, numero FROM Jugadores WHERE id = @equipoId";
 
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                MySqlCommand command = new MySqlCommand(query, connection);
+                SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@equipoId", equipoId);
                 connection.Open();
-                MySqlDataReader reader = command.ExecuteReader();
+                SqlDataReader reader = command.ExecuteReader();
 
                 while (reader.Read())
                 {
                     Jugador jugador = new Jugador(
                         reader.GetString("nombre"),
                         reader.GetInt32("numero"),
+
                         equipoId  // Añadir el equipoId aquí
                     )
                     {
@@ -69,18 +71,18 @@ namespace practica_equipo_futbol.Models
             }
 
             return jugadores;
-        }
+        }*/
 
         public List<Equipo> GetEquiposConEntrenadores()
         {
             List<Equipo> equipos = new List<Equipo>();
             string query = "SELECT id, nombre, entrenador, ciudad FROM equipos";
 
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                MySqlCommand command = new MySqlCommand(query, connection);
+                SqlCommand command = new SqlCommand(query, connection);
                 connection.Open();
-                MySqlDataReader reader = command.ExecuteReader();
+                SqlDataReader reader = command.ExecuteReader();
 
                 while (reader.Read())
                 {
@@ -105,11 +107,11 @@ namespace practica_equipo_futbol.Models
         public int GetNumeroJugadoresPorEquipo(int equipoId)
         {
             int numeroJugadores = 0;
-            string query = "SELECT COUNT(*) FROM jugadores WHERE equipo_id = @equipoId";
+            string query = "SELECT COUNT(*) FROM jugadores WHERE id = @equipoId";
 
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                MySqlCommand command = new MySqlCommand(query, connection);
+                SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@equipoId", equipoId);
                 connection.Open();
                 numeroJugadores = Convert.ToInt32(command.ExecuteScalar());
@@ -123,9 +125,9 @@ namespace practica_equipo_futbol.Models
         {
             string query = "UPDATE equipos SET ciudad = @ciudad WHERE id = @equipoId";
 
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                MySqlCommand command = new MySqlCommand(query, connection);
+                SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@ciudad", ciudad);
                 command.Parameters.AddWithValue("@equipoId", equipoId);
                 connection.Open();
@@ -141,14 +143,14 @@ namespace practica_equipo_futbol.Models
         SELECT e.id AS EquipoId, e.nombre AS EquipoNombre, e.entrenador AS EquipoEntrenador, e.ciudad AS EquipoCiudad,
                j.id AS JugadorId, j.nombre AS JugadorNombre, j.numero AS JugadorNumero
         FROM equipos e
-        LEFT JOIN jugadores j ON e.id = j.equipo_id
+        LEFT JOIN jugadores j ON e.id = j.id
         ORDER BY e.nombre, j.nombre";
 
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                MySqlCommand command = new MySqlCommand(query, connection);
+                SqlCommand command = new SqlCommand(query, connection);
                 connection.Open();
-                MySqlDataReader reader = command.ExecuteReader();
+                SqlDataReader reader = command.ExecuteReader();
 
                 while (reader.Read())
                 {
@@ -191,11 +193,11 @@ namespace practica_equipo_futbol.Models
 
         public void CambiarEquipoJugador(int jugadorId, int nuevoEquipoId)
         {
-            string query = "UPDATE jugadores SET equipo_id = @nuevoEquipoId WHERE id = @jugadorId";
+            string query = "UPDATE jugadores SET id = @nuevoEquipoId WHERE id = @jugadorId";
 
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                MySqlCommand command = new MySqlCommand(query, connection);
+                SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@nuevoEquipoId", nuevoEquipoId);
                 command.Parameters.AddWithValue("@jugadorId", jugadorId);
 
@@ -211,14 +213,14 @@ namespace practica_equipo_futbol.Models
             string query = @"
         SELECT e.id, e.nombre, e.entrenador, e.ciudad
         FROM equipos e
-        LEFT JOIN jugadores j ON e.id = j.equipo_id
+        LEFT JOIN jugadores j ON e.id = j.id
         WHERE j.id IS NULL";
 
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                MySqlCommand command = new MySqlCommand(query, connection);
+                SqlCommand command = new SqlCommand(query, connection);
                 connection.Open();
-                MySqlDataReader reader = command.ExecuteReader();
+                SqlDataReader reader = command.ExecuteReader();
 
                 while (reader.Read())
                 {
