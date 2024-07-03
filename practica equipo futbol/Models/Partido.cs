@@ -2,6 +2,7 @@
 
 namespace practica_equipo_futbol.Models
 {
+    //Clase Partido
     public class Partido : IPartido
     {
         private Equipo equipoLocal;
