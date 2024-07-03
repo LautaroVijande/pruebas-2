@@ -8,7 +8,6 @@ namespace practica_equipo_futbol.Models
 {
     public class EquipoVisitante : Equipo, IPartido
     {
-        // Constructor
         public EquipoVisitante(string nombre, string entrenador, string ciudad) : base(nombre, entrenador, ciudad) { }
 
         public string SimularPartido()
@@ -16,7 +15,6 @@ namespace practica_equipo_futbol.Models
             return "Simulación del partido como equipo visitante";
         }
 
-        // Devuelve el nombre del jugador
         public override string ToString()
         {
             return this.Nombre;

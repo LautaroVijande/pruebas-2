@@ -5,7 +5,7 @@
         public int Id { get; set; }
         public string Nombre { get; set; }
         public int Numero { get; set; }
-        public int EquipoId { get; set; }  // Aseguramos que esta propiedad esté presente
+        public int EquipoId { get; set; }  
 
         public Jugador(string nombre, int numero, int equipoId)
         {

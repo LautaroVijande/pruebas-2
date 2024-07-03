@@ -10,18 +10,18 @@ namespace practica_equipo_futbol
         {
             
 
-            // Cargar equipo
+            // Cargar equipo nuevo con parametros
             Equipo equipo1 = new Equipo("Union de Santa Fe", "Mariano Coppola","SANTA FE");
 
-            // Cargar jugadores
-            Jugador jugador1 = new Jugador("Lautaro", 9, 13);
-            Jugador jugador2 = new Jugador("Thiago", 5, 13);
+            // Cargar jugadores nuevos con parametros
+            Jugador jugador1 = new Jugador("Lautaro\n", 9, 13);
+            Jugador jugador2 = new Jugador("Thiago\n", 5, 13);
 
             // Agregar los jugadores
             equipo1.AgregarJugador(jugador1);
             equipo1.AgregarJugador(jugador2);
 
-            // Mostrar información
+            // Mostrar información de datos de las tablas en la BBDD
             Console.WriteLine($"Equipo: {equipo1.Nombre}");
             Console.WriteLine($"Entrenador: {equipo1.Entrenador}");
             Console.WriteLine("Jugadores:");
@@ -30,15 +30,15 @@ namespace practica_equipo_futbol
                 Console.WriteLine($"Jugador: {jugador.Nombre}, Número: {jugador.Numero}");
             }
 
-            // Buscar los jugadores
+            // Buscar los jugadores con el nombre Lautaro y Thiago
             bool buscarJugador1 = equipo1.BuscarJugador("Lautaro");
             bool buscarJugador2 = equipo1.BuscarJugador("Thiago");
 
-            // Mostrar información sobre la búsqueda
+            // Mostrar información sobre la búsqueda que se nombra en el paso anterior
             Console.WriteLine($"Jugador Lautaro: {buscarJugador1}");
             Console.WriteLine($"Jugador Thiago: {buscarJugador2}");
 
-            // Eliminar jugador
+            // Eliminar jugador con datos
             Jugador jugadorABorrar = equipo1.Jugadores.Find(j => j.Nombre == "Lautaro");
             if (jugadorABorrar != null)
             {
@@ -62,26 +62,11 @@ namespace practica_equipo_futbol
 
             EquipoBD equipoBD = new EquipoBD();
 
-            // 1. Obtener la lista de jugadores de un equipo específico
-           /* Console.WriteLine("Ingrese el ID del equipo para ver sus jugadores:");
-            int equipoId = int.Parse(Console.ReadLine());
-            var jugadores = equipoBD.GetNumeroJugadoresPorEquipoEspecifico(equipoId);
-
-            Console.WriteLine($"\nJugadores del equipo con ID {equipoId}:");
-           foreach (var jugador in jugadores)
-            {
-                Console.WriteLine($"ID: {jugador.Id}, Nombre: {jugador.Nombre}, Número: {jugador.Numero}");
-            }*/
-
-            /*equipoBD.UpdateCiudadEquipo(1, "Buenos Aires");
-            equipoBD.UpdateCiudadEquipo(2, "Rosario");
-            equipoBD.UpdateCiudadEquipo(3, "Córdoba");
-            equipoBD.UpdateCiudadEquipo(4, "Mendoza");
-            equipoBD.UpdateCiudadEquipo(5, "La Plata");*/
+           
             
-            Console.WriteLine("\n----------------------------------------------\n");
+            Console.WriteLine("\n\n");
 
-            // 2. Obtener la lista de todos los equipos y sus entrenadores
+            //Obtener la lista de todos los equipos y sus entrenadores
             var equiposConEntrenadores = equipoBD.GetEquiposConEntrenadores();
             Console.WriteLine("Lista de todos los equipos y sus entrenadores: \n");
             foreach (var equipo in equiposConEntrenadores)
@@ -89,9 +74,9 @@ namespace practica_equipo_futbol
                 Console.WriteLine($"ID: {equipo.Id}, Nombre: {equipo.Nombre}, Entrenador: {equipo.Entrenador}, Ciudad: {equipo.Ciudad}");
             }
 
-            Console.WriteLine("\n----------------------------------------------\n");
+            Console.WriteLine("\n\n");
 
-            // 3. Lista ordenada de jugadores y equipos
+            //Lista ordenada de jugadores y equipos
             var equiposConJugadores = equipoBD.GetEquiposYJugadoresOrdenados();
 
             Console.WriteLine("Lista de equipos y sus jugadores ordenados por nombre del equipo y del jugador:");
@@ -106,9 +91,9 @@ namespace practica_equipo_futbol
                 }
             }
 
-            Console.WriteLine("\n----------------------------------------------\n");
+            Console.WriteLine("\n\n");
 
-            // 4. Mostrar número de jugadores por equipo
+            //Mostrar número de jugadores por equipo
             Console.WriteLine("\nNúmero de jugadores por equipo: \n");
             foreach (var equipo in equiposConEntrenadores)
             {
@@ -116,34 +101,34 @@ namespace practica_equipo_futbol
                 Console.WriteLine($"Equipo: {equipo.Nombre}, Número de Jugadores: {numeroJugadores}");
             }
 
-            Console.WriteLine("\n----------------------------------------------\n");
-            //Console.WriteLine("5. Cambiar equipo del jugador");
+            Console.WriteLine("\n\n");
+            Console.WriteLine("5. Cambiar equipo del jugador");
             int jugadorId = 9;
             int nuevoEquipoId = 13;
             equipoBD.CambiarEquipoJugador(jugadorId, nuevoEquipoId);
 
-            Console.WriteLine($"Se cambió el equipo del jugador con ID {jugadorId} con el nombre al equipo con ID {nuevoEquipoId}.");
+            Console.WriteLine($"Jugador {jugadorId} Se asigno al Equipo {nuevoEquipoId}.");
 
             
-            Console.WriteLine("\nNúmero de jugadores por equipo especifico: \n");
-            
-            foreach (var equipo in equiposConEntrenadores)
-            {
-                int numeroJugadores = equipoBD.GetNumeroJugadoresPorEquipoEspecifico(equipo.Id);
-                Console.WriteLine($"Equipo: {equipo.Nombre}, Número de Jugadores: {numeroJugadores}");
-            }
-
-
-
-            Console.WriteLine("\n----------------------------------------------\n");
-
-            /* 6. Obtener la lista de equipos que no tienen jugadores
-            var equiposSinJugadores = equipoBD.GetEquiposSinJugadores();
+           
+            // Obtener la lista de equipos que no tienen jugadores
+            /*var equiposSinJugadores = equipoBD.GetEquiposSinJugadores();
             Console.WriteLine("\nEquipos que no tienen jugadores: \n");
             foreach (var equipo in equiposSinJugadores)
             {
                 Console.WriteLine($"ID: {equipo.Id}, Nombre: {equipo.Nombre}, Entrenador: {equipo.Entrenador}");
             }*/
+
+            //  Obtener la lista de jugadores de un equipo específico
+            /* Console.WriteLine("Ingrese el ID del equipo para ver sus jugadores:");
+             int equipoId = int.Parse(Console.ReadLine());
+             var jugadores = equipoBD.GetNumeroJugadoresPorEquipoEspecifico(equipoId);
+
+             Console.WriteLine($"\nJugadores del equipo con ID {equipoId}:");
+             foreach (var jugador in jugadores)
+             {
+                 Console.WriteLine($"ID: {jugador.Id}, Nombre: {jugador.Nombre}, Número: {jugador.Numero}");
+             }*/
 
         }
     }

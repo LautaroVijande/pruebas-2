@@ -95,13 +95,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\equipo.cs" />
-    <Compile Include="Models\equipoBD.cs" />
-    <Compile Include="Models\EquipoConJugadores.cs" />
+    <Compile Include="Models\Equipo.cs" />
+    <Compile Include="Models\EquipoDataBase.cs" />
+    <Compile Include="Models\EquipoJugadores.cs" />
     <Compile Include="Models\EquipoLocal.cs" />
     <Compile Include="Models\EquipoVisitante.cs" />
     <Compile Include="Models\IPartido.cs" />
-    <Compile Include="Models\jugador.cs" />
+    <Compile Include="Models\Jugador.cs" />
     <Compile Include="Models\Partido.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

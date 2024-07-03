@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace practica_equipo_futbol.Models
 {
-    public class EquipoConJugadores
+    public class EquipoJugadores
     {
         public Equipo Equipo { get; set; }
         public List<Jugador> Jugadores { get; set; }
